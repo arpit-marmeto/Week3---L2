@@ -72,7 +72,7 @@ function renderFirstResult(photo) {
     document.getElementById('firstResultButton').setAttribute('href', photo.url);
 }
 
-// Render similar results in the slider
+// Render similar results in the slider// Render similar results in the slider
 function renderSliderResults(photos) {
     const sliderResults = document.getElementById('sliderResults');
     sliderResults.innerHTML = ''; // Clear previous results
@@ -82,7 +82,7 @@ function renderSliderResults(photos) {
         <li class="splide__slide pl-16 pr-16">
         <div class="bg-white shadow-md card-container ">
         <img src="${photo.src.medium}" alt="${photo.alt || 'No description available'}" class="card-image">
-        <span class="heart-icon cursor-pointer" onclick="toggleFavorite(${photo.id}, '${photo.src.medium}', '${photo.alt || 'No description available'}', this)">
+        <span class="heart-icon cursor-pointer" onclick="toggleFavorite(${photo.id}, '${photo.src.medium}', '${photo.alt || 'No description available'}', '${photo.photographer}', this)">
             <i class="fa-solid fa-heart"></i>
         </span>
         <div class="p-5 card-content">
@@ -118,10 +118,13 @@ function renderSliderResults(photos) {
 
 const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
-// Render favorites list
+// Render favorites list// Render favorites list
 function renderFavorites() {
     const favoritesResults = document.getElementById('favoritesResults');
     favoritesResults.innerHTML = ''; // Clear previous results
+
+    // Sort favorites by the 'alt' property
+    favorites.sort((a, b) => a.alt.localeCompare(b.alt));
 
     favorites.forEach(favorite => {
         const sliderCard = `
@@ -130,7 +133,7 @@ function renderFavorites() {
                 <img src="${favorite.src}" alt="${favorite.alt}" class="w-full h-40 object-cover mb-4">
                 <div class="p-5">          
                     <h3 class="text-xl font-bold">${favorite.alt}</h3>
-                    <p class="text-gray-600">${favorite.photographer}</p>
+                    <p class="text-gray-600">${favorite.photographer || 'Unknown Photographer'}</p>
                     <button class="bg-red-500 text-white px-4 py-2 rounded mt-4" onclick="removeFavorite(${favorite.id})">Remove</button>
                 </div>
                 </div>
@@ -159,12 +162,12 @@ function renderFavorites() {
 }
 
 // Toggle favorite status
-function toggleFavorite(id, src, alt, heartIconElement) {
+function toggleFavorite(id, src, alt, photographer, heartIconElement) {
     const index = favorites.findIndex(fav => fav.id === id);
 
     if (index === -1) {
         // Add to favorites
-        favorites.push({ id, src, alt });
+        favorites.push({ id, src, alt, photographer });
     } else {
         // Remove from favorites
         favorites.splice(index, 1);
@@ -189,7 +192,6 @@ function removeFavorite(id) {
 
 // Render favorites on page load
 renderFavorites();
-
 
 function updateHeartIcon(id, heartIconElement) {
     const isFavorite = favorites.some(fav => fav.id === id);
