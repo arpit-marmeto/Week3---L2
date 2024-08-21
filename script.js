@@ -77,6 +77,9 @@ function renderSliderResults(photos) {
                     <h3 class="text-xl font-bold">${photo.alt || 'No description available'}</h3> <!-- Display image name -->
                     <p class="text-gray-600">Photographer: ${photo.photographer}</p> <!-- Display photographer name -->
                     <a href="${photo.url}" class="mt-2 bg-red-500 text-white px-4 py-2 rounded">Explore Profile</a>
+                    <span class="heart-icon cursor-pointer text-red-500" onclick="toggleFavorite(${photo.id}, '${photo.src.medium}', '${photo.alt || 'No description available'}')">
+                        <i class="fa-solid fa-heart"></i>
+                    </span>
                 </div>
             </li>
         `;
@@ -101,3 +104,61 @@ function renderSliderResults(photos) {
         },
     }).mount();
 }
+
+// Favorite list functionality
+const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+function renderFavorites() {
+    const favoritesResults = document.getElementById('favoritesResults');
+    favoritesResults.innerHTML = ''; // Clear previous results
+
+    favorites.forEach(favorite => {
+        const sliderCard = `
+            <li class="splide__slide">
+                <div class="bg-white shadow-md p-4">
+                    <img src="${favorite.src}" alt="${favorite.alt}" class="w-full h-40 object-cover mb-4">
+                    <h3 class="text-xl font-bold">${favorite.alt}</h3>
+                    <p class="text-gray-600">Photographer: ${favorite.photographer}</p>
+                    <a href="${favorite.url}" class="mt-2 bg-red-500 text-white px-4 py-2 rounded">Explore Profile</a>
+                </div>
+            </li>
+        `;
+        favoritesResults.insertAdjacentHTML('beforeend', sliderCard);
+    });
+
+    // Initialize or refresh Splide.js for favorites
+    new Splide('#favoritesSlider', {
+        perPage: 4,
+        gap: '1rem',
+        pagination: false,
+        breakpoints: {
+            640: {
+                perPage: 1,
+            },
+            768: {
+                perPage: 2,
+            },
+            1024: {
+                perPage: 3,
+            },
+        },
+    }).mount();
+}
+
+function toggleFavorite(id, src, alt) {
+    const index = favorites.findIndex(fav => fav.id === id);
+
+    if (index === -1) {
+        // Add to favorites
+        favorites.push({ id, src, alt });
+    } else {
+        // Remove from favorites
+        favorites.splice(index, 1);
+    }
+
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+    renderFavorites();
+}
+
+// Render favorites on page load
+renderFavorites();

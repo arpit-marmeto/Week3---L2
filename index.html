@@ -26,7 +26,7 @@
     
             <!-- Logo (centered in desktop mode) -->
             <div class="flex justify-center flex-grow md:flex-none">
-                <img src="logo.png" alt="Logo" class="w-20 mx-auto md:mx-0">
+                <img src="img/logo.png" alt="Logo" class="w-20 mx-auto md:mx-0">
             </div>
     
             <!-- Right side (icons) -->
@@ -64,7 +64,7 @@
     
     <!-- Hero Section -->
     <section class="relative">
-        <img src="Poster.png" alt="Hero Background" class="w-full h-[500px] object-cover">
+        <img src="img/Poster.png" alt="Hero Background" class="w-full h-[500px] object-cover">
         <div class="absolute top-0 left-0 w-full h-full flex flex-col justify-center items-start p-8">
             <h1 class="text-4xl text-white font-bold">Stock photos</h1>
             <p class="text-white mt-4">John Wick is on the run after killing a member of the international assassins' guild, and with a $14 million price tag on his head, he is the target of hit men and women everywhere.</p>
@@ -73,35 +73,46 @@
     </section>
 
     <!-- Search Section -->
-<div class="container mx-auto py-8 px-4 md:px-12">
-    <!-- Search Bar -->
-    <div class="flex justify-center mb-8">
-        <input type="text" id="searchBar" placeholder="Search..." class="w-1/2 md:w-1/3 p-4 border border-gray-300 rounded shadow-md">
-    </div>
+    <div class="container mx-auto py-8 px-4 md:px-12">
+        <!-- Search Bar -->
+        <div class="flex justify-center mb-8">
+            <input type="text" id="searchBar" placeholder="Search..." class="w-1/2 md:w-1/3 p-4 border border-gray-300 rounded shadow-md">
+        </div>
 
-    <!-- First Result -->
-    <div id="firstResultCard" class="bg-white p-6 shadow-md mb-8 flex items-center hidden min-h-[150px] rounded-lg">
-        <img id="firstResultImage" src="" alt="Photographer" class="w-1/3 h-48 object-cover rounded-lg">
-        <div class="ml-6 flex flex-col justify-between">
-            <div>
-                <h2 id="firstResultName" class="text-2xl font-bold mb-2"></h2>
-                <p id="firstResultCategory" class="text-gray-600 mb-4"></p>
+        <!-- First Result -->
+        <div id="firstResultCard" class="bg-white p-6 shadow-md mb-8 flex items-center hidden min-h-[150px] rounded-lg">
+            <img id="firstResultImage" src="" alt="Photographer" class="w-1/3 h-48 object-cover rounded-lg">
+            <div class="ml-6 flex flex-col justify-between">
+                <div>
+                    <h2 id="firstResultName" class="text-2xl font-bold mb-2"></h2>
+                    <p id="firstResultCategory" class="text-gray-600 mb-4"></p>
+                </div>
+                <a id="firstResultButton" href="#" class="bg-red-500 text-white px-6 py-2 rounded shadow-md">Explore More</a>
             </div>
-            <button id="firstResultButton" class="bg-red-500 text-white px-6 py-2 rounded shadow-md">Explore More</button>
+        </div>
+
+        <!-- Similar Results -->
+        <h2 class="text-2xl font-bold mb-4">Similar Results</h2>
+        <div class="splide" id="resultsSlider">
+            <div class="splide__track">
+                <ul class="splide__list" id="sliderResults">
+                    <!-- Slider cards will be appended here -->
+                </ul>
+            </div>
         </div>
     </div>
 
-    <!-- Similar Results -->
-    <h2 class="text-2xl font-bold mb-4">Similar Results</h2>
-    <div class="splide" id="resultsSlider">
-        <div class="splide__track">
-            <ul class="splide__list" id="sliderResults">
-                <!-- Slider cards will be appended here -->
-            </ul>
+    <!-- Favorites List -->
+    <div class="container mx-auto py-8 px-4 md:px-12">
+        <h2 class="text-2xl font-bold mb-4">Favorites List</h2>
+        <div class="splide" id="favoritesSlider">
+            <div class="splide__track">
+                <ul class="splide__list" id="favoritesResults">
+                    <!-- Favorites cards will be appended here -->
+                </ul>
+            </div>
         </div>
     </div>
-</div>
-
 
     <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
     <script src="script.js"></script>
