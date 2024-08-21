@@ -1,0 +1,44 @@
+body {
+    font-family: 'Roboto', sans-serif;
+}
+.hamburger {
+    display: none;
+}
+
+
+#searchBar {
+    font-family: 'Roboto', sans-serif;
+}
+
+#firstResultCard {
+    display: flex;
+    align-items: center;
+}
+
+.splide__slide {
+    min-width: 250px;
+}
+
+
+@media (max-width: 768px) {
+    .hamburger {
+        display: block;
+    }
+    .nav-links {
+        display: none;
+    }
+    .menu-active {
+        display: block;
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100%;
+        background: white;
+        width: 250px;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+    }
+    .menu-active.open {
+        transform: translateX(0);
+    }
+}
