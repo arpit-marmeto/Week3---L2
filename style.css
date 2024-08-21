@@ -18,6 +18,35 @@ body {
 .splide__slide {
     min-width: 250px;
 }
+.card-container {
+    position: relative; /* Make the container a positioning context */
+}
+
+.heart-icon {
+    position: absolute; /* Position it absolutely within the container */
+    top: 10px; /* Distance from the top */
+    right: 10px; /* Distance from the right */
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.521); /* Black background */
+    border-radius: 50%; /* Make it a circle */
+    width: 40px; /* Size of the circle */
+    height: 40px; /* Size of the circle */
+    color: white; /* Color of the heart icon */
+    font-size: 24px; /* Adjust the size of the heart icon */
+    z-index: 10; /* Ensure it appears above other elements */
+}
+
+.card-image {
+    width: 100%; /* Ensure the image fills the container */
+    height: auto; /* Maintain aspect ratio */
+}
+
+.card-content {
+    padding: 0.5rem; /* Adjust padding as needed */
+}
+
 
 
 @media (max-width: 768px) {

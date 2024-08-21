@@ -1,10 +1,16 @@
+// ----- Hamburger Menu Functionality -----
+
+// Toggle menu visibility when hamburger icon is clicked
 document.querySelector('.hamburger').addEventListener('click', function() {
     document.querySelector('.menu-active').classList.toggle('open');
 });
 
+// Close the menu when close icon is clicked
 document.querySelector('.close-menu').addEventListener('click', function() {
     document.querySelector('.menu-active').classList.remove('open');
 });
+
+// ----- Pexels API Integration -----
 
 const API_KEY = 'ml3IcyswtevACPjeoE94GGXBWYVbtBmg88s6GaeLBxjkmWYl0K5X6FKC';
 const API_URL = 'https://api.pexels.com/v1/search?query=';
@@ -55,12 +61,14 @@ document.getElementById('searchBar').addEventListener('input', async function() 
     }
 });
 
+// ----- Rendering Functions -----
+
 // Render the first result card
 function renderFirstResult(photo) {
     document.getElementById('firstResultCard').classList.remove('hidden');
     document.getElementById('firstResultImage').src = photo.src.medium;
-    document.getElementById('firstResultName').textContent = photo.photographer;
-    document.getElementById('firstResultCategory').textContent = `Image: ${photo.alt || 'No description available'}`;
+    document.getElementById('firstResultAlt').textContent = photo.alt;
+    document.getElementById('firstResultPhotographer').textContent = photo.photographer;
     document.getElementById('firstResultButton').setAttribute('href', photo.url);
 }
 
@@ -71,17 +79,18 @@ function renderSliderResults(photos) {
 
     photos.forEach(photo => {
         const sliderCard = `
-            <li class="splide__slide">
-                <div class="bg-white shadow-md p-4">
-                    <img src="${photo.src.medium}" alt="${photo.alt || 'No description available'}" class="w-full h-40 object-cover mb-4">
-                    <h3 class="text-xl font-bold">${photo.alt || 'No description available'}</h3> <!-- Display image name -->
-                    <p class="text-gray-600">Photographer: ${photo.photographer}</p> <!-- Display photographer name -->
-                    <a href="${photo.url}" class="mt-2 bg-red-500 text-white px-4 py-2 rounded">Explore Profile</a>
-                    <span class="heart-icon cursor-pointer text-red-500" onclick="toggleFavorite(${photo.id}, '${photo.src.medium}', '${photo.alt || 'No description available'}')">
-                        <i class="fa-solid fa-heart"></i>
-                    </span>
-                </div>
-            </li>
+        <li class="splide__slide pl-16 pr-16">
+        <div class="bg-white shadow-md card-container ">
+        <img src="${photo.src.medium}" alt="${photo.alt || 'No description available'}" class="card-image">
+        <span class="heart-icon cursor-pointer" onclick="toggleFavorite(${photo.id}, '${photo.src.medium}', '${photo.alt || 'No description available'}', this)">
+            <i class="fa-solid fa-heart"></i>
+        </span>
+        <div class="p-5 card-content">
+            <h3 class="text-xl font-bold">${photo.alt || 'No description available'}</h3>
+            <p class="text-gray-600">${photo.photographer}</p>
+        </div>
+        </div>
+        </li>
         `;
         sliderResults.insertAdjacentHTML('beforeend', sliderCard);
     });
@@ -105,21 +114,25 @@ function renderSliderResults(photos) {
     }).mount();
 }
 
-// Favorite list functionality
+// ----- Favorite List Functionality -----
+
 const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
+// Render favorites list
 function renderFavorites() {
     const favoritesResults = document.getElementById('favoritesResults');
     favoritesResults.innerHTML = ''; // Clear previous results
 
     favorites.forEach(favorite => {
         const sliderCard = `
-            <li class="splide__slide">
-                <div class="bg-white shadow-md p-4">
-                    <img src="${favorite.src}" alt="${favorite.alt}" class="w-full h-40 object-cover mb-4">
+            <li class="splide__slide pl-16 pr-16">
+                <div class="bg-white shadow-md">
+                <img src="${favorite.src}" alt="${favorite.alt}" class="w-full h-40 object-cover mb-4">
+                <div class="p-5">          
                     <h3 class="text-xl font-bold">${favorite.alt}</h3>
-                    <p class="text-gray-600">Photographer: ${favorite.photographer}</p>
-                    <a href="${favorite.url}" class="mt-2 bg-red-500 text-white px-4 py-2 rounded">Explore Profile</a>
+                    <p class="text-gray-600">${favorite.photographer}</p>
+                    <button class="bg-red-500 text-white px-4 py-2 rounded mt-4" onclick="removeFavorite(${favorite.id})">Remove</button>
+                </div>
                 </div>
             </li>
         `;
@@ -145,7 +158,8 @@ function renderFavorites() {
     }).mount();
 }
 
-function toggleFavorite(id, src, alt) {
+// Toggle favorite status
+function toggleFavorite(id, src, alt, heartIconElement) {
     const index = favorites.findIndex(fav => fav.id === id);
 
     if (index === -1) {
@@ -157,8 +171,33 @@ function toggleFavorite(id, src, alt) {
     }
 
     localStorage.setItem('favorites', JSON.stringify(favorites));
+    updateHeartIcon(id, heartIconElement); // Update the heart icon color
     renderFavorites();
+}
+
+
+// Remove a favorite
+function removeFavorite(id) {
+    // Remove from favorites array
+    const index = favorites.findIndex(fav => fav.id === id);
+    if (index !== -1) {
+        favorites.splice(index, 1);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        renderFavorites(); // Re-render the favorites list
+    }
 }
 
 // Render favorites on page load
 renderFavorites();
+
+
+function updateHeartIcon(id, heartIconElement) {
+    const isFavorite = favorites.some(fav => fav.id === id);
+    if (isFavorite) {
+        heartIconElement.classList.add('text-red-500'); // Set heart color to red
+        heartIconElement.classList.remove('text-white'); // Remove white color if present
+    } else {
+        heartIconElement.classList.add('text-white'); // Set heart color to white
+        heartIconElement.classList.remove('text-red-500'); // Remove red color if present
+    }
+}
